@@ -28,9 +28,11 @@ export default function Booking() {
   const [isConfirmed, setIsConfirmed] = useState(false);
   const [resource, setResource] = useState<any>(null);
   const [busySlots, setBusySlots] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (resourceId) {
+      setIsLoading(true);
       // Fetch resource details
       const fetchResource = async () => {
         try {
@@ -48,6 +50,8 @@ export default function Booking() {
           }
         } catch (error) {
           console.error("Error fetching resource:", error);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchResource();
@@ -71,6 +75,8 @@ export default function Booking() {
         }
       };
       fetchBusySlots();
+    } else {
+      setIsLoading(false);
     }
   }, [resourceId, date]);
 
@@ -80,7 +86,7 @@ export default function Booking() {
       return;
     }
 
-    if (!date || !selectedSlot) {
+    if (!date || !selectedSlot || !resource) {
       toast.error("Please select a date and time slot.");
       return;
     }
@@ -110,7 +116,15 @@ export default function Booking() {
     }
   };
 
-  if (isConfirmed) {
+  if (isLoading && resourceId) {
+    return (
+      <div className="min-h-screen pt-32 flex items-center justify-center mesh-gradient">
+        <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (isConfirmed && resource) {
     return (
       <div className="min-h-screen pt-32 pb-20 px-6 mesh-gradient flex items-center justify-center">
         <motion.div 
@@ -250,9 +264,9 @@ export default function Booking() {
                 
                 <div className="relative z-10">
                   <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mb-2">Selected Resource Node</p>
-                  <h4 className="text-3xl font-black tracking-tighter uppercase leading-none">{resource.name}</h4>
+                  <h4 className="text-3xl font-black tracking-tighter uppercase leading-none">{resource?.name || "No Resource Selected"}</h4>
                   <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-primary/60" /> {resource.location}
+                    <MapPin className="w-4 h-4 text-primary/60" /> {resource?.location || "N/A"}
                   </p>
                 </div>
                 

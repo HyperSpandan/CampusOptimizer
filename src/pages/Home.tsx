@@ -8,7 +8,6 @@ import Magnetic from "@/components/Magnetic";
 import { auth, signInWithGoogle, db } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
-import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 export default function Home() {
   const [user] = useAuthState(auth);
@@ -20,29 +19,7 @@ export default function Home() {
     } else {
       try {
         const result = await signInWithGoogle();
-        if (result?.user) {
-          // Check if user exists in Firestore
-          const userRef = doc(db, "users", result.user.uid);
-          const userSnap = await getDoc(userRef);
-          
-          if (!userSnap.exists()) {
-            // Create user document
-            await setDoc(userRef, {
-              uid: result.user.uid,
-              email: result.user.email,
-              displayName: result.user.displayName,
-              photoURL: result.user.photoURL,
-              role: "student", // Default role
-              createdAt: serverTimestamp(),
-              lastLogin: serverTimestamp(),
-            });
-          } else {
-            // Update last login
-            await setDoc(userRef, {
-              lastLogin: serverTimestamp(),
-            }, { merge: true });
-          }
-          
+        if (result) {
           navigate("/dashboard");
         }
       } catch (error: any) {
