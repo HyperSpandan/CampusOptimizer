@@ -1,0 +1,5 @@
+{
+  "name": "Campus Resource Optimizer",
+  "description": "A modern full-stack platform for students to find, book, and optimize usage of shared campus resources like labs, study rooms, and equipment.",
+  "requestFramePermissions": ["camera"]
+}
