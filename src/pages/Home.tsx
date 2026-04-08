@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
+import DotGrid from "@/components/DotGrid";
 import { auth, signInWithGoogle, db } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
@@ -29,8 +30,10 @@ export default function Home() {
       }
     }
   };
+
   return (
     <div className="flex flex-col gap-24 pb-24 relative overflow-hidden mesh-gradient">
+      <DotGrid className="opacity-80" />
       {/* Hero Section */}
       <section className="relative pt-32 pb-40 px-6">
         <motion.div 
