@@ -1,7 +1,10 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User, setPersistence, browserLocalPersistence } from 'firebase/auth';
 import { getFirestore, doc, getDoc, setDoc, serverTimestamp, getDocFromServer } from 'firebase/firestore';
-import firebaseConfigJson from '../../firebase-applet-config.json';
+
+// Optional import of the config file to prevent build errors if it's missing (e.g. in CI/CD)
+const configs = import.meta.glob('../../firebase-applet-config.json', { eager: true });
+const firebaseConfigJson = (configs['../../firebase-applet-config.json'] as any)?.default || {};
 
 // Support environment variables for Vercel/Production
 const firebaseConfig = {

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
-import DotGrid from "@/components/DotGrid";
+import LightPillar from "@/components/LightPillar";
 import { auth, signInWithGoogle, db } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
@@ -30,36 +30,23 @@ export default function Home() {
       }
     }
   };
-
   return (
     <div className="flex flex-col gap-24 pb-24 relative overflow-hidden mesh-gradient">
-      <DotGrid className="opacity-80" />
+      {/* Background Effect */}
+      <div className="absolute inset-0 -z-10 opacity-30 pointer-events-none">
+        <LightPillar 
+          topColor="#00ff99" 
+          bottomColor="#3b82f6" 
+          intensity={0.8}
+          rotationSpeed={0.2}
+          pillarWidth={4.0}
+          pillarHeight={0.3}
+          glowAmount={0.008}
+        />
+      </div>
+
       {/* Hero Section */}
       <section className="relative pt-32 pb-40 px-6">
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10"
-        >
-          <motion.div 
-            animate={{ 
-              x: [0, 30, 0],
-              y: [0, -30, 0],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px]" 
-          />
-          <motion.div 
-            animate={{ 
-              x: [0, -40, 0],
-              y: [0, 40, 0],
-            }}
-            transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-            className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[150px]" 
-          />
-        </motion.div>
-
         <div className="text-center flex flex-col items-center gap-8 max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
