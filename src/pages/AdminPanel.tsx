@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import TiltCard from "@/components/TiltCard";
 import { useState, useEffect } from "react";
-import { db, auth, handleFirestoreError, OperationType } from "@/firebase";
+import { db, auth, handleFirestoreError, OperationType } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy, limit, addDoc, serverTimestamp, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";

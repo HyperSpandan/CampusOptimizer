@@ -8,7 +8,7 @@ import TiltCard from "@/components/TiltCard";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { db, handleFirestoreError, OperationType } from "@/firebase";
+import { db, handleFirestoreError, OperationType } from "@/lib/firebase";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 
 export default function Dashboard() {

@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { cn } from "@/lib/utils";
 import { useState, useEffect } from "react";
-import { db, handleFirestoreError, OperationType } from "@/firebase";
+import { db, handleFirestoreError, OperationType } from "@/lib/firebase";
 import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 
 const MOCK_USAGE_DATA = [
