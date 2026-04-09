@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import TiltCard from "@/components/TiltCard";
 import Magnetic from "@/components/Magnetic";
-import LightPillar from "@/components/LightPillar";
+import DotGrid from "@/components/DotGrid";
 import { auth, signInWithGoogle, db } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "sonner";
@@ -32,19 +32,7 @@ export default function Home() {
   };
   return (
     <div className="flex flex-col gap-24 pb-24 relative overflow-hidden mesh-gradient">
-      {/* Background Effect */}
-      <div className="absolute inset-0 -z-10 opacity-30 pointer-events-none">
-        <LightPillar 
-          topColor="#00ff99" 
-          bottomColor="#3b82f6" 
-          intensity={0.8}
-          rotationSpeed={0.2}
-          pillarWidth={4.0}
-          pillarHeight={0.3}
-          glowAmount={0.008}
-        />
-      </div>
-
+      <DotGrid className="opacity-80" />
       {/* Hero Section */}
       <section className="relative pt-32 pb-40 px-6">
         <div className="text-center flex flex-col items-center gap-8 max-w-5xl mx-auto">
