@@ -126,43 +126,44 @@ export default function Booking() {
 
   if (isConfirmed && resource) {
     return (
-      <div className="min-h-screen pt-32 pb-20 px-6 mesh-gradient flex items-center justify-center">
+      <div className="min-h-screen pt-24 sm:pt-32 pb-20 px-4 sm:px-6 mesh-gradient flex items-center justify-center">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          className="glass p-12 rounded-[3rem] border border-primary/20 bg-primary/5 text-center flex flex-col items-center gap-8 max-w-2xl w-full relative overflow-hidden"
+          className="glass p-6 sm:p-12 rounded-[2rem] sm:rounded-[3rem] border border-primary/20 bg-primary/5 text-center flex flex-col items-center gap-6 sm:gap-8 max-w-2xl w-full relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] -mr-32 -mt-32" />
           
-          <div className="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center neon-glow mb-2 rotate-12">
-            <CheckCircle2 className="w-12 h-12 text-primary-foreground -rotate-12" />
+          <div className="w-16 h-16 sm:w-24 sm:h-24 bg-primary rounded-2xl sm:rounded-3xl flex items-center justify-center neon-glow mb-2 rotate-12">
+            <CheckCircle2 className="w-8 h-8 sm:w-12 sm:h-12 text-primary-foreground -rotate-12" />
           </div>
           
           <div>
-            <h1 className="text-5xl font-black tracking-tighter uppercase leading-none mb-4">RESERVATION <br /><span className="text-primary neon-text">SECURED</span></h1>
-            <p className="text-muted-foreground text-lg font-medium">
+            <h1 className="text-3xl sm:text-5xl font-black tracking-tighter uppercase leading-none mb-4">RESERVATION <br /><span className="text-primary neon-text">SECURED</span></h1>
+            <p className="text-muted-foreground text-base sm:text-lg font-medium px-4">
               Your spot at <span className="text-foreground font-bold">{resource.name}</span> is confirmed.
             </p>
           </div>
           
-          <div className="bg-white p-6 rounded-[2rem] shadow-2xl relative group">
+          <div className="bg-white p-4 sm:p-6 rounded-[1.5rem] sm:rounded-[2rem] shadow-2xl relative group">
             <div className="absolute inset-0 bg-primary/20 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity" />
-            <QRCodeSVG value={`booking-${resource.id}-${Date.now()}`} size={180} className="relative z-10" />
+            <QRCodeSVG value={`booking-${resource.id}-${Date.now()}`} size={140} className="relative z-10 sm:hidden" />
+            <QRCodeSVG value={`booking-${resource.id}-${Date.now()}`} size={180} className="relative z-10 hidden sm:block" />
           </div>
-          <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">Scan at entrance for node access</p>
+          <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em]">Scan at entrance for node access</p>
 
-          <div className="grid grid-cols-2 gap-4 w-full">
-            <div className="glass-dark p-6 rounded-2xl border border-border">
-              <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-1">Date Node</p>
-              <p className="text-xl font-black">{date?.toLocaleDateString()}</p>
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+            <div className="glass-dark p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-border">
+              <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-1">Date Node</p>
+              <p className="text-base sm:text-xl font-black">{date?.toLocaleDateString()}</p>
             </div>
-            <div className="glass-dark p-6 rounded-2xl border border-border">
-              <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-1">Time Slot</p>
-              <p className="text-xl font-black">{selectedSlot}</p>
+            <div className="glass-dark p-4 sm:p-6 rounded-xl sm:rounded-2xl border border-border">
+              <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-1">Time Slot</p>
+              <p className="text-base sm:text-xl font-black">{selectedSlot}</p>
             </div>
           </div>
 
-          <Button onClick={() => navigate("/dashboard")} className="w-full h-16 rounded-2xl bg-primary text-primary-foreground font-black text-lg hover:neon-glow transition-all">
+          <Button onClick={() => navigate("/dashboard")} className="w-full h-14 sm:h-16 rounded-xl sm:rounded-2xl bg-primary text-primary-foreground font-black text-base sm:text-lg hover:neon-glow transition-all">
             RETURN TO HUB
           </Button>
         </motion.div>
@@ -171,24 +172,24 @@ export default function Booking() {
   }
 
   return (
-    <div className="min-h-screen pt-32 pb-20 px-6 relative overflow-hidden mesh-gradient">
+    <div className="min-h-screen pt-24 sm:pt-32 pb-20 px-4 sm:px-6 relative overflow-hidden mesh-gradient">
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-2 mb-2"
           >
-            <Badge variant="outline" className="rounded-full bg-primary/10 text-primary border-primary/20 font-black px-3 py-1 text-[10px] uppercase tracking-widest">
+            <Badge variant="outline" className="rounded-full bg-primary/10 text-primary border-primary/20 font-black px-3 py-1 text-[8px] sm:text-[10px] uppercase tracking-widest">
               Reservation Engine
             </Badge>
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3 h-3 text-primary" />
-              <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">AI Conflict Check Active</span>
+              <span className="text-[8px] sm:text-[10px] text-muted-foreground font-bold uppercase tracking-widest">AI Conflict Check Active</span>
             </div>
           </motion.div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tighter leading-none uppercase">BOOK YOUR <span className="text-primary neon-text">SPACE</span></h1>
-          <p className="text-muted-foreground mt-4 font-medium max-w-md">Secure your spot in the campus ecosystem with real-time slot allocation.</p>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-none uppercase">BOOK YOUR <span className="text-primary neon-text">SPACE</span></h1>
+          <p className="text-muted-foreground mt-4 font-medium max-w-md text-sm sm:text-base">Secure your spot in the campus ecosystem with real-time slot allocation.</p>
         </div>
 
         {!resourceId && (
@@ -234,8 +235,8 @@ export default function Booking() {
             <h3 className="text-xl font-black tracking-tight flex items-center gap-3 uppercase">
               <Clock className="w-6 h-6 text-primary" /> 2. Select Time Slot
             </h3>
-            <div className="glass p-10 rounded-[2.5rem] border border-white/10">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <div className="glass p-4 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] border border-white/10">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
                 {TIME_SLOTS.map((slot) => {
                   const isSelected = selectedSlot === slot;
                   const isBusy = busySlots.includes(slot);
@@ -247,7 +248,7 @@ export default function Booking() {
                       disabled={isBusy}
                       onClick={() => setSelectedSlot(slot)}
                       className={cn(
-                        "h-16 rounded-2xl border font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center",
+                        "h-14 sm:h-16 rounded-xl sm:rounded-2xl border font-black text-[10px] sm:text-xs uppercase tracking-widest transition-all flex items-center justify-center",
                         isSelected ? "bg-primary text-primary-foreground border-primary neon-glow" : 
                         isBusy ? "bg-white/5 text-muted-foreground border-white/5 cursor-not-allowed opacity-30" :
                         "glass border-white/10 text-foreground hover:border-primary/50 hover:bg-primary/5"
@@ -259,26 +260,26 @@ export default function Booking() {
                 })}
               </div>
 
-              <div className="mt-16 p-10 glass-dark rounded-[2.5rem] border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-10 relative overflow-hidden group">
+              <div className="mt-8 sm:mt-16 p-6 sm:p-10 glass-dark rounded-[2rem] sm:rounded-[2.5rem] border border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-8 sm:gap-10 relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-primary/5 rounded-full blur-[40px] -mr-24 -mt-24 group-hover:bg-primary/10 transition-colors" />
                 
                 <div className="relative z-10">
-                  <p className="text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mb-2">Selected Resource Node</p>
-                  <h4 className="text-3xl font-black tracking-tighter uppercase leading-none">{resource?.name || "No Resource Selected"}</h4>
-                  <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2">
+                  <p className="text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.2em] mb-2">Selected Resource Node</p>
+                  <h4 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase leading-none">{resource?.name || "No Resource Selected"}</h4>
+                  <p className="text-muted-foreground font-medium mt-2 flex items-center gap-2 text-sm">
                     <MapPin className="w-4 h-4 text-primary/60" /> {resource?.location || "N/A"}
                   </p>
                 </div>
                 
-                <div className="flex flex-col gap-3 min-w-[240px] relative z-10">
+                <div className="flex flex-col gap-3 min-w-full md:min-w-[240px] relative z-10">
                   <Button 
                     onClick={handleBooking}
                     disabled={isSubmitting || !selectedSlot || !date}
-                    className="h-16 rounded-2xl bg-primary text-primary-foreground font-black text-lg hover:neon-glow transition-all shadow-xl"
+                    className="h-14 sm:h-16 rounded-xl sm:rounded-2xl bg-primary text-primary-foreground font-black text-base sm:text-lg hover:neon-glow transition-all shadow-xl"
                   >
                     {isSubmitting ? "PROCESSING..." : "CONFIRM BOOKING"}
                   </Button>
-                  <p className="text-center text-[10px] text-muted-foreground font-black uppercase tracking-[0.15em]">
+                  <p className="text-center text-[8px] sm:text-[10px] text-muted-foreground font-black uppercase tracking-[0.15em]">
                     {selectedSlot ? `${date?.toLocaleDateString()} @ ${selectedSlot}` : "Awaiting slot selection"}
                   </p>
                 </div>
