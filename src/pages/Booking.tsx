@@ -9,11 +9,21 @@ import { toast } from "sonner";
 import { QRCodeSVG } from "qrcode.react";
 import { cn } from "@/lib/utils";
 import { db, auth, handleFirestoreError, OperationType } from "@/lib/firebase";
-import { collection, addDoc, serverTimestamp, query, where, getDocs, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  runTransaction,
+} from "firebase/firestore";
 
 const TIME_SLOTS = [
-  "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", 
-  "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM", 
+  "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM",
+  "12:00 PM", "01:00 PM", "02:00 PM", "03:00 PM",
   "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"
 ];
 
@@ -56,7 +66,7 @@ export default function Booking() {
       };
       fetchResource();
 
-      // Fetch busy slots for the selected date
+      // Fetch busy slots for the selected date (UI display only)
       const fetchBusySlots = async () => {
         if (!date) return;
         try {
@@ -93,29 +103,73 @@ export default function Booking() {
 
     setIsSubmitting(true);
     try {
-      const bookingData = {
-        resourceId,
-        resourceName: resource?.name || "Unknown Resource",
-        userId: auth.currentUser.uid,
-        userName: auth.currentUser.displayName || auth.currentUser.email,
-        userEmail: auth.currentUser.email,
-        date: date.toISOString().split('T')[0],
-        slot: selectedSlot,
-        status: "confirmed",
-        createdAt: serverTimestamp(),
-      };
+      const dateStr = date.toISOString().split('T')[0];
+      const bookingsCollection = collection(db, "bookings");
 
-      await addDoc(collection(db, "bookings"), bookingData);
-      
+      // Use a Firestore transaction to atomically check availability and create the booking
+      await runTransaction(db, async (transaction) => {
+        // Query for any existing confirmed booking for the same resource, date, and slot
+        const q = query(
+          bookingsCollection,
+          where("resourceId", "==", resourceId),
+          where("date", "==", dateStr),
+          where("slot", "==", selectedSlot),
+          where("status", "==", "confirmed")
+        );
+
+        const snapshot = await transaction.get(q);
+        
+        // If a booking already exists, the slot is taken
+        if (!snapshot.empty) {
+          throw new Error("This time slot has just been booked by someone else.");
+        }
+
+        // Create a new document reference with auto-generated ID
+        const newBookingRef = doc(bookingsCollection);
+        
+        const bookingData = {
+          resourceId,
+          resourceName: resource?.name || "Unknown Resource",
+          userId: auth.currentUser!.uid,
+          userName: auth.currentUser!.displayName || auth.currentUser!.email,
+          userEmail: auth.currentUser!.email,
+          date: dateStr,
+          slot: selectedSlot,
+          status: "confirmed",
+          createdAt: serverTimestamp(),
+        };
+
+        // Atomically write the new booking
+        transaction.set(newBookingRef, bookingData);
+      });
+
       setIsSubmitting(false);
       setIsConfirmed(true);
       toast.success("Booking confirmed successfully!");
-    } catch (error) {
+    } catch (error: any) {
       setIsSubmitting(false);
-      handleFirestoreError(error, OperationType.CREATE, "bookings");
+      if (error.message?.includes("slot has just been booked")) {
+        toast.error(error.message);
+        // Refresh busy slots to update UI
+        if (date) {
+          const dateStr = date.toISOString().split('T')[0];
+          const q = query(
+            collection(db, "bookings"),
+            where("resourceId", "==", resourceId),
+            where("date", "==", dateStr),
+            where("status", "==", "confirmed")
+          );
+          const snapshot = await getDocs(q);
+          setBusySlots(snapshot.docs.map(d => d.data().slot));
+        }
+        setSelectedSlot(null);
+      } else {
+        handleFirestoreError(error, OperationType.CREATE, "bookings");
+      }
     }
   };
 
+  // ... (rest of the component remains unchanged: loading state, confirmation UI, render)
   if (isLoading && resourceId) {
     return (
       <div className="min-h-screen pt-32 flex items-center justify-center mesh-gradient">
