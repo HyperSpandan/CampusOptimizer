@@ -27,9 +27,6 @@ setPersistence(auth, browserLocalPersistence);
 export const db = getFirestore(app, firestoreDatabaseId);
 
 const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({
-  hd: 'vitbhopal.ac.in' // Suggest VIT domain in Google login
-});
 
 let isSigningIn = false;
 
@@ -43,11 +40,6 @@ export const signInWithGoogle = async () => {
     
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-
-    if (!user.email?.endsWith('@vitbhopal.ac.in') && user.email !== 'dhagespandan@gmail.com') {
-      await signOut(auth);
-      throw new Error('Access restricted to @vitbhopal.ac.in domain.');
-    }
 
     // Check if user exists in Firestore, if not create profile
     const userDocRef = doc(db, 'users', user.uid);
